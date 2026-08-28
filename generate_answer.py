@@ -124,7 +124,9 @@ load_dotenv()
 # Set up once, outside the function (so we don't reload the model every call)
 model = SentenceTransformer("all-MiniLM-L6-v2")
 client = QdrantClient(host="localhost", port=6333)
-LLM_MODEL = "minimaxai/minimax-m3"
+# LLM_MODEL = "minimaxai/minimax-m3"
+LLM_MODEL = "deepseek-ai/deepseek-v4-flash-0731"
+# LLM_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
 llm_client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.getenv("NVIDIA_API_KEY")
