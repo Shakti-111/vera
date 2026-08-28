@@ -124,6 +124,7 @@ load_dotenv()
 # Set up once, outside the function (so we don't reload the model every call)
 model = SentenceTransformer("all-MiniLM-L6-v2")
 client = QdrantClient(host="localhost", port=6333)
+LLM_MODEL = "minimaxai/minimax-m3"
 llm_client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.getenv("NVIDIA_API_KEY")
@@ -154,7 +155,7 @@ Question: {query}
 
 Answer:"""
     response = llm_client.chat.completions.create(
-        model="meta/llama-3.3-70b-instruct",
+        model=LLM_MODEL,
         messages=[{"role": "user", "content": prompt}],
         max_tokens=300
     )
@@ -178,7 +179,7 @@ Check every claim in the answer against the context. Respond ONLY in this exact 
   "reasoning": "<one sentence explaining your score>"
 }}"""
     response = llm_client.chat.completions.create(
-        model="meta/llama-3.3-70b-instruct",
+        model=LLM_MODEL,
         messages=[{"role": "user", "content": verification_prompt}],
         max_tokens=300
     )
