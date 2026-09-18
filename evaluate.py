@@ -3,6 +3,8 @@ from generate_answer import ask_vera, llm_client, LLM_MODEL
 from golden_test_set import golden_test_set
 import json
 import time
+import json
+from datetime import datetime
 
 
 def call_with_retry(func, *args, max_retries=5, **kwargs):
@@ -11,7 +13,7 @@ def call_with_retry(func, *args, max_retries=5, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            if "429" in str(e) or "Too Many Requests" in str(e):
+            if "429" in str(e) or "Too Many Requests" in str(e) or "Empty response" in str(e):
                 wait_time = 30 * (attempt + 1)  # 30s, 60s, 90s, 120s, 150s
                 print(f"  Rate limited — waiting {wait_time}s before retry...")
                 time.sleep(wait_time)
@@ -42,6 +44,28 @@ Respond ONLY in this JSON format:
     cleaned = response.choices[0].message.content.strip().replace("```json", "").replace("```", "")
     return json.loads(cleaned)
 
+def log_failure(question, expected, actual, trust_score, explanation):
+    """Appends a failed test case to a permanent failure log file."""
+    entry = {
+        "timestamp": datetime.now().isoformat(),
+        "question": question,
+        "expected_answer": expected,
+        "actual_answer": actual,
+        "trust_score": trust_score,
+        "judge_explanation": explanation
+    }
+
+    try:
+        with open("failure_log.json", "r") as f:
+            log = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        log = []
+
+    log.append(entry)
+
+    with open("failure_log.json", "w") as f:
+        json.dump(log, f, indent=2)
+
 
 def run_evaluation():
     results = []
@@ -67,6 +91,14 @@ def run_evaluation():
 
         status = "CORRECT" if judge["correct"] else "INCORRECT"
         print(f"  {status} | Trust Score: {vera_result['trust_score']}/100")
+    if not judge["correct"]:
+       log_failure(
+        question,
+        expected,
+        vera_result["answer"],
+        vera_result["trust_score"],
+        judge["explanation"]
+    )
 
     # Summary
     total = len(results)

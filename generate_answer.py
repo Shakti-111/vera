@@ -125,7 +125,9 @@ load_dotenv()
 model = SentenceTransformer("all-MiniLM-L6-v2")
 client = QdrantClient(host="localhost", port=6333)
 # LLM_MODEL = "minimaxai/minimax-m3"
+# LLM_MODEL = "nvidia/nemotron-3-ultra-550b-a55b"
 LLM_MODEL = "deepseek-ai/deepseek-v4-flash-0731"
+# LLM_MODEL = "meta/llama-3.1-8b-instruct"
 # LLM_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
 llm_client = OpenAI(
     base_url="https://integrate.api.nvidia.com/v1",
@@ -185,9 +187,12 @@ Check every claim in the answer against the context. Respond ONLY in this exact 
         messages=[{"role": "user", "content": verification_prompt}],
         max_tokens=300
     )
-    cleaned = response.choices[0].message.content.strip().replace("```json", "").replace("```", "")
-    return json.loads(cleaned)
 
+    content = response.choices[0].message.content
+    if content is None:
+        raise Exception("Empty response from model - likely a transient issue")
+    cleaned = content.strip().replace("```json", "").replace("```", "")
+    return json.loads(cleaned)
 
 def ask_vera(query):
     """

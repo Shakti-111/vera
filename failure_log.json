@@ -1,0 +1,10 @@
+[
+  {
+    "timestamp": "2026-09-18T14:22:53.706759",
+    "question": "What is the maximum battery life of a Bluetooth module?",
+    "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules.",
+    "actual_answer": "The context does not contain information about the battery life of a Bluetooth module.",
+    "trust_score": 100,
+    "judge_explanation": "The actual answer incorrectly claims there is no information about Bluetooth module battery life, whereas the expected answer specifies a 500-hour battery life."
+  }
+]
