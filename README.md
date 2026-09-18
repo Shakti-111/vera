@@ -1,2 +1,2 @@
 # vera
-Self-Auditing, Self-Improving RAG System
+An Adaptive Self Evolving Retrieval Augmented Generation System
