@@ -13,7 +13,7 @@ def call_with_retry(func, *args, max_retries=5, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            if "429" in str(e) or "Too Many Requests" in str(e) or "Empty response" in str(e):
+            if any(keyword in str(e) for keyword in ["429", "Too Many Requests", "Empty response", "Connection error", "Server disconnected"]):
                 wait_time = 30 * (attempt + 1)  # 30s, 60s, 90s, 120s, 150s
                 print(f"  Rate limited — waiting {wait_time}s before retry...")
                 time.sleep(wait_time)
@@ -44,25 +44,23 @@ Respond ONLY in this JSON format:
     cleaned = response.choices[0].message.content.strip().replace("```json", "").replace("```", "")
     return json.loads(cleaned)
 
-def log_failure(question, expected, actual, trust_score, explanation):
-    """Appends a failed test case to a permanent failure log file."""
+def log_failure(question, expected, actual, trust_score, explanation, category, category_reason):
     entry = {
         "timestamp": datetime.now().isoformat(),
         "question": question,
         "expected_answer": expected,
         "actual_answer": actual,
         "trust_score": trust_score,
-        "judge_explanation": explanation
+        "judge_explanation": explanation,
+        "failure_category": category,
+        "category_reason": category_reason
     }
-
     try:
         with open("failure_log.json", "r") as f:
             log = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         log = []
-
     log.append(entry)
-
     with open("failure_log.json", "w") as f:
         json.dump(log, f, indent=2)
 
@@ -92,13 +90,49 @@ def run_evaluation():
         status = "CORRECT" if judge["correct"] else "INCORRECT"
         print(f"  {status} | Trust Score: {vera_result['trust_score']}/100")
     if not judge["correct"]:
-       log_failure(
+            category_result = call_with_retry(
+        categorize_failure, question, expected, vera_result["answer"], vera_result["sources"]
+    )
+    log_failure(
         question,
         expected,
         vera_result["answer"],
         vera_result["trust_score"],
-        judge["explanation"]
+        judge["explanation"],
+        category_result["category"],
+        category_result["reason"]
     )
+       
+def categorize_failure(question, expected_answer, actual_answer, retrieved_chunks):
+    """Classifies why a failure happened, using the retrieved context as evidence."""
+    context_preview = "\n\n".join(retrieved_chunks)
+    prompt = f"""You are analyzing why an AI system's answer was incorrect.
+
+Question: {question}
+Expected Answer: {expected_answer}
+Actual Answer: {actual_answer}
+Retrieved Context: {context_preview}
+
+Classify the failure into EXACTLY ONE of these categories:
+- "no_information" - the retrieved context genuinely does not contain the information needed
+- "retrieval_issue" - the information likely exists in the source document, but the wrong sections were retrieved
+- "generation_issue" - the right information was retrieved, but the answer was still wrong
+
+Respond ONLY in this JSON format:
+{{
+  "category": "<one of the three categories above>",
+  "reason": "<one sentence explaining your classification>"
+}}"""
+    response = llm_client.chat.completions.create(
+        model=LLM_MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=150
+    )
+    content = response.choices[0].message.content
+    if content is None:
+        raise Exception("Empty response from model - likely a transient issue")
+    cleaned = content.strip().replace("```json", "").replace("```", "")
+    return json.loads(cleaned)
 
     # Summary
     total = len(results)

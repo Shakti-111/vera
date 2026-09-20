@@ -6,5 +6,35 @@
     "actual_answer": "The context does not contain information about the battery life of a Bluetooth module.",
     "trust_score": 100,
     "judge_explanation": "The actual answer incorrectly claims there is no information about Bluetooth module battery life, whereas the expected answer specifies a 500-hour battery life."
+  },
+  {
+    "timestamp": "2026-09-19T09:06:01.000389",
+    "question": "What is the maximum battery life of a Bluetooth module?",
+    "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules.",
+    "actual_answer": "The context does not contain information about the battery life of a Bluetooth module.",
+    "trust_score": 100,
+    "judge_explanation": "The actual answer incorrectly claims the context lacks battery life information, while the expected answer clearly specifies a 500-hour battery life.",
+    "failure_category": "unknown",
+    "category_reason": "Empty response from classifier"
+  },
+  {
+    "timestamp": "2026-09-19T14:57:11.652295",
+    "question": "What is the maximum battery life of a Bluetooth module?",
+    "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules.",
+    "actual_answer": "The context does not contain information about the battery life of a Bluetooth module.",
+    "trust_score": 100,
+    "judge_explanation": "The actual answer incorrectly claims no information exists, while the expected answer specifies a 500-hour battery life.",
+    "failure_category": "no_information",
+    "category_reason": "The retrieved context contains no mention of battery life for Bluetooth modules, so the information is genuinely absent from the provided context."
+  },
+  {
+    "timestamp": "2026-09-20T09:03:53.746784",
+    "question": "What is the maximum battery life of a Bluetooth module?",
+    "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules.",
+    "actual_answer": "The context does not contain enough information to answer the question about the maximum battery life of a Bluetooth module.",
+    "trust_score": 100,
+    "judge_explanation": "The actual answer states there is insufficient information, but the expected answer clearly provides a specific battery life of 500 hours.",
+    "failure_category": "no_information",
+    "category_reason": "The retrieved context provides technical specifications for Bluetooth, LoRa, and ZigBee but does not mention battery life for any module, so the information is genuinely absent."
   }
 ]

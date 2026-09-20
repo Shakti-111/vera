@@ -40,10 +40,10 @@ golden_test_set = [
         "question": "What IEEE standard was used to standardize Bluetooth?",
         "expected_answer": "IEEE 802.15.1."
     },
-#     {
-#     "question": "What is the maximum battery life of a Bluetooth module?",
-#     "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules."
-# },
+    {
+    "question": "What is the maximum battery life of a Bluetooth module?",
+    "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules."
+},
 ]
 
 if __name__ == "__main__":
