@@ -40,8 +40,9 @@ Check every claim in the answer against the context. Respond ONLY in this exact 
 }}"""
 
 response = llm_client.chat.completions.create(
-    model="minimaxai/minimax-m3",
+    # model="minimaxai/minimax-m3",
     # model="meta/llama-3.3-70b-instruct",
+    model="openai/gpt-oss-20b",
     messages=[{"role": "user", "content": verification_prompt}],
     max_tokens=300
 )

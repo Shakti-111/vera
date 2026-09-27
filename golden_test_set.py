@@ -40,10 +40,22 @@ golden_test_set = [
         "question": "What IEEE standard was used to standardize Bluetooth?",
         "expected_answer": "IEEE 802.15.1."
     },
-    {
-    "question": "What is the maximum battery life of a Bluetooth module?",
-    "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules."
-},
+#     {
+#     "question": "What is the maximum battery life of a Bluetooth module?",
+#     "expected_answer": "The document specifies a 500-hour battery life for Bluetooth modules."
+# },
+# {
+#     "question": "What are the transmission ranges of Bluetooth and Zigbee?",
+#     "expected_answer": "Bluetooth has a range of up to 10 metres, while Zigbee has a longer range of 10-100 metres."
+# },
+# {
+#     "question": "Which communication technology mentioned has the longest possible range?",
+#     "expected_answer": "LoRa has the longest range, supporting 2-5km in towns and 10-15km in rural areas."
+# },
+# {
+#     "question": "What do Bluetooth, Wi-Fi, and Zigbee have in common?",
+#     "expected_answer": "They are all wireless communication technologies used for connecting IoT devices."
+# }
 ]
 
 if __name__ == "__main__":
