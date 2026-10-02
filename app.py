@@ -38,9 +38,18 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .trust-low { background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444; color: #F87171; }
 .trust-track { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; }
 .trust-fill { height: 100%; border-radius: 10px; }
-#MainMenu, footer {visibility: hidden;}
-[data-testid="stToolbar"] {visibility: hidden;}
+MainMenu, footer {visibility: hidden;}
 header {background: transparent;}
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    background: rgba(34, 211, 238, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    border-radius: 8px;
+    padding: 4px;
+}
+[data-testid="collapsedControl"] svg {
+    fill: #22D3EE !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
