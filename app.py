@@ -7,14 +7,26 @@ DEFAULT_COLLECTION = "iot_notes"
 DEFAULT_LABEL = "COMMUNICATION MODULES.pdf (demo document)"
 UPLOAD_COLLECTION = "uploaded_doc"
 
-st.set_page_config(page_title="Adaptive RAG System", page_icon="🧠", layout="centered", initial_sidebar_state="expanded")
+st.set_page_config(page_title=" Adaptive RAG System", page_icon="🧠", layout="centered", initial_sidebar_state="expanded")
+from datetime import datetime
 
+def get_greeting():
+    hour = datetime.now().hour
+    if hour < 12:
+        return "Hey,Good Morning", "🌅"
+    elif hour < 17:
+        return "Hey,Good Afternoon", "☀️"
+    else:
+        return "Hey,Good Evening", "🌙"
+
+greeting_text, greeting_icon = get_greeting()
+st.markdown(f'<div class="greeting-banner">{greeting_icon} {greeting_text}!</div>', unsafe_allow_html=True)
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .stApp { background: linear-gradient(160deg, #0B132B 0%, #16325C 50%, #0B132B 100%); }
-.block-container { max-width: 780px; padding-top: 2.5rem; margin-left: auto !important; margin-right: auto !important; }
+.block-container { max-width: 780px; padding-top: 4.5rem; margin-left: auto !important; margin-right: auto !important; }
 [data-testid="stSidebar"] { background: #0B132B; border-right: 1px solid rgba(255,255,255,0.08); }
 .sidebar-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.15em; color: #22D3EE; margin-bottom: 0.2em; }
 .sidebar-note { color: #9FB3C8; font-size: 0.85em; margin-bottom: 0.8em; }
@@ -39,7 +51,12 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .trust-track { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; }
 .trust-fill { height: 100%; border-radius: 10px; }
 MainMenu, footer {visibility: hidden;}
-header {background: transparent;}
+header {
+    background: transparent !important;
+}
+[data-testid="stHeader"] {
+    background: transparent !important;
+}
 [data-testid="collapsedControl"] {
     visibility: visible !important;
     background: rgba(34, 211, 238, 0.15);
@@ -49,6 +66,21 @@ header {background: transparent;}
 }
 [data-testid="collapsedControl"] svg {
     fill: #22D3EE !important;
+}
+
+.greeting-banner {
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #22D3EE;
+    margin-bottom: 0.6em;
+    opacity: 0;
+    animation: greetingFade 1.2s ease forwards;
+}
+@keyframes greetingFade {
+    0% { opacity: 0; transform: translateY(-8px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -102,7 +134,7 @@ with st.sidebar:
             st.session_state.uploader_version += 1
             st.rerun()
 
-st.markdown('<div class="hero-title">🧠 Adaptive Self-Evolving RAG System</div>', unsafe_allow_html=True)
+st.markdown('<div class="hero-title">🧠 An Adaptive Self-Evolving RAG System</div>', unsafe_allow_html=True)
 st.markdown('<div class="hero-subtitle">Every answer is independently verified and scored for trust — before it reaches you.</div>', unsafe_allow_html=True)
 st.markdown("""
 <div class="badge-row">
